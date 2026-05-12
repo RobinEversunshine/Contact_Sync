@@ -5,9 +5,22 @@ on:
     types: [sync_contacts] # 对应快捷指令中的 event_type
 
 jobs:
-  display_contact:
+  build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Run sync script
+        env:
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+        run: python sync_test.py
+
       - name: Print Contact Info
         run: |
           echo "receive new contact："
