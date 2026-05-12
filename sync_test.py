@@ -16,9 +16,12 @@ def main():
     last_name = payload.get('lname', 'Unknown')
     phone = payload.get('phone', 'N/A')
 
+    fields = ['fname', 'lname', 'phone', 'email', 'address', 'note', 'bday', 'url', 'social']
+    
     print("--- sync contact request ---")
-    print(f"name: {first_name} {last_name}")
-    print(f"phone number: {phone}")
+    for field in fields:
+        value = payload.get(field, 'N/A')
+        print(f"{field.capitalize()}: {value}")
     print("-----------------------")
 
     # 这里以后可以添加 Google People API 代码
