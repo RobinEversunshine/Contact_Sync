@@ -12,8 +12,8 @@ def main():
     # 提取快捷指令发来的 client_payload
     payload = event_data.get('client_payload', {})
     
-    first_name = payload.get('first', 'Unknown')
-    last_name = payload.get('last', 'Unknown')
+    first_name = payload.get('fname', 'Unknown')
+    last_name = payload.get('lname', 'Unknown')
     phone = payload.get('phone', 'N/A')
 
     print("--- 收到数据同步请求 ---")
