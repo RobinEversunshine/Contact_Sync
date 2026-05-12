@@ -24,6 +24,6 @@ jobs:
       - name: Print Contact Info
         run: |
           echo "receive new contact："
-          echo "name: ${{ github.event.client_payload.first_name }} ${{ github.event.client_payload.last_name }}"
+          echo "name: ${{ github.event.client_payload.fname }} ${{ github.event.client_payload.lname }}"
           echo "phone number: ${{ github.event.client_payload.phone }}"
           echo "sync time: $(date)"
