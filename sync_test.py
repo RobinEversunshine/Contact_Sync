@@ -16,16 +16,16 @@ def main():
     last_name = payload.get('lname', 'Unknown')
     phone = payload.get('phone', 'N/A')
 
-    print("--- 收到数据同步请求 ---")
-    print(f"姓名: {first_name} {last_name}")
-    print(f"电话: {phone}")
+    print("--- sync contact request ---")
+    print(f"name: {first_name} {last_name}")
+    print(f"phone number: {phone}")
     print("-----------------------")
 
     # 这里以后可以添加 Google People API 代码
     if first_name != 'Unknown':
-        print("模拟同步成功！")
+        print("sync success")
     else:
-        print("未接收到有效数据。")
+        print("sync failed")
 
 if __name__ == "__main__":
     main()
