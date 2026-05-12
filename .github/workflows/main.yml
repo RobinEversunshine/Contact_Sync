@@ -1,0 +1,16 @@
+name: Receive Contact from Shortcut
+
+on:
+  repository_dispatch:
+    types: [sync_contacts] # 对应快捷指令中的 event_type
+
+jobs:
+  display_contact:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Contact Info
+        run: |
+          echo "receive new contact："
+          echo "name: ${{ github.event.client_payload.first_name }} ${{ github.event.client_payload.last_name }}"
+          echo "phone number: ${{ github.event.client_payload.phone }}"
+          echo "sync time: $(date)"
