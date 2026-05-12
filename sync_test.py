@@ -17,7 +17,8 @@ def main():
     phone = payload.get('phone', 'N/A')
 
     fields = ['fname', 'lname', 'phone', 'email', 'address', 'note', 'bday', 'url', 'social']
-    
+
+    print(payload)
     print("--- sync contact request ---")
     for field in fields:
         value = payload.get(field, 'N/A')
