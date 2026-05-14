@@ -1,13 +1,14 @@
 from google_auth_oauthlib.flow import InstalledAppFlow
-import json
-import sys
+import os
 
 SCOPES = ['https://www.googleapis.com/auth/contacts']
 
 def main():
+    creds_json_str = os.environ.get('GOOGLE_CREDENTIALS')
+
     # 确保你的仓库里有 credentials.json
     flow = InstalledAppFlow.from_client_secrets_file(
-        'credentials.json', 
+        creds_json_str, 
         scopes=SCOPES,
         redirect_uri='urn:ietf:wg:oauth:2.0:oob' # 告诉 Google 我们是手动复制代码
     )
