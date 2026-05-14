@@ -1,6 +1,6 @@
 import os
 import json
-import sys
+
 
 def main():
     # GitHub Actions 会把触发时传来的数据存放在这个环境变量中
@@ -13,8 +13,6 @@ def main():
     payload = event_data.get('client_payload', {})
     
     first_name = payload.get('fname', 'Unknown')
-    last_name = payload.get('lname', 'Unknown')
-    phone = payload.get('phone', 'N/A')
 
     fields = ['fname', 'lname', 'phone', 'email', 'address', 'note', 'bday', 'url', 'social']
 
@@ -30,6 +28,9 @@ def main():
         print("sync success")
     else:
         print("sync failed")
+    
+    return payload
+
 
 if __name__ == "__main__":
     main()
