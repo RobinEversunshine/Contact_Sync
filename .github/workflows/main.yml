@@ -2,7 +2,7 @@ name: Receive Contact from Shortcut
 
 on:
   repository_dispatch:
-    types: [sync_contacts] # 对应快捷指令中的 event_type
+    types: [sync_contacts] # has to be the same in shortcuts: event_type
 
 jobs:
   build:
@@ -19,11 +19,5 @@ jobs:
       - name: Run sync script
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
-        run: python sync_test.py
+        run: python execute.py
 
-      # - name: Print Contact Info
-      #   run: |
-      #     echo "receive new contact："
-      #     echo "name: ${{ github.event.client_payload.fname }} ${{ github.event.client_payload.lname }}"
-      #     echo "phone number: ${{ github.event.client_payload.phone }}"
-      #     echo "sync time: $(date)"

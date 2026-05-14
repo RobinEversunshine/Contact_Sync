@@ -200,19 +200,23 @@ def upsert_contact(service, data):
 
 def get_service_from_env(env_var_name):
     # get token from GitHub Secrets
-    # token_data = json.loads(os.environ.get(env_var_name))
-    # creds = Credentials.from_authorized_user_info(token_data)
-    creds = Credentials.from_authorized_user_file(f'{env_var_name}.json', SCOPES)
+    if __name__ == '__main__':
+        creds = Credentials.from_authorized_user_file(f'{env_var_name}.json', SCOPES)
+    else:
+        token_data = json.loads(os.environ.get(env_var_name))
+        creds = Credentials.from_authorized_user_info(token_data)
     return build('people', 'v1', credentials=creds)
 
 
 
 def main(payload):
     # start service
-    # service_a = get_service_from_env('GMAIL_TOKEN_A')
-    # service_b = get_service_from_env('GMAIL_TOKEN_B')
-    service_a = get_service_from_env('token_a')
-    service_b = get_service_from_env('token_b')
+    if __name__ == '__main__':
+        service_a = get_service_from_env('token_a')
+        service_b = get_service_from_env('token_b')
+    else:
+        service_a = get_service_from_env('GMAIL_TOKEN_A')
+        service_b = get_service_from_env('GMAIL_TOKEN_B')
     
     # create or update contact
     upsert_contact(service_a, payload)
