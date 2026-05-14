@@ -24,5 +24,7 @@ jobs:
       - name: Run sync script
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
+          GMAIL_TOKEN_A: ${{ secrets.GMAIL_TOKEN_A }}
+          GMAIL_TOKEN_B: ${{ secrets.GMAIL_TOKEN_B }}
         run: python execute.py
 
