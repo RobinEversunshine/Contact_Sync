@@ -1,0 +1,33 @@
+name: Generate Google Token
+on:
+  workflow_dispatch:
+    inputs:
+      auth_code:
+        description: 'Paste the Authorization Code here (leave empty for first run)'
+        required: false
+        default: ''
+
+jobs:
+  auth:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          
+      - name: Install dependencies
+        run: pip install google-auth-oauthlib
+
+      - name: Run Auth Script
+        run: |
+          # 如果输入框为空，打印链接
+          if [ "${{ github.event.inputs.auth_code }}" == "" ]; then
+            python auth_generator_github.py
+            echo "::error::请点击日志中的链接获取代码，并再次运行此 Workflow，填入代码！"
+            exit 1
+          else
+            # 如果有代码，执行交换 Token 的逻辑（需在 Python 脚本中补充该逻辑）
+            python auth_generator_github.py --code ${{ github.event.inputs.auth_code }}
+          fi

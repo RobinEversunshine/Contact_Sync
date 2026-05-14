@@ -1,4 +1,4 @@
-name: Receive Contact from Shortcut
+name: Receive Contact from Shortcut, then Push to Gmail Accounts
 
 on:
   repository_dispatch:
