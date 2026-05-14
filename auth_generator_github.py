@@ -1,16 +1,23 @@
 from google_auth_oauthlib.flow import InstalledAppFlow
-import os
+import os, json
 
 SCOPES = ['https://www.googleapis.com/auth/contacts']
 
 def main():
+    # 1. 获取 JSON 字符串
     creds_json_str = os.environ.get('GOOGLE_CREDENTIALS')
+    
+    if not creds_json_str:
+        raise ValueError("环境变量 GOOGLE_CREDENTIALS 为空")
 
-    # 确保你的仓库里有 credentials.json
-    flow = InstalledAppFlow.from_client_secrets_file(
-        creds_json_str, 
+    # 2. 将字符串解析为 Python 字典
+    client_config = json.loads(creds_json_str)
+
+    # 3. 使用 from_client_config 而不是 from_client_secrets_file
+    flow = InstalledAppFlow.from_client_config(
+        client_config, 
         scopes=SCOPES,
-        redirect_uri='urn:ietf:wg:oauth:2.0:oob' # 告诉 Google 我们是手动复制代码
+        redirect_uri='urn:ietf:wg:oauth:2.0:oob'
     )
 
     # 1. 生成并打印授权链接
