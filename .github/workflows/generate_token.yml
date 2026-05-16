@@ -31,5 +31,5 @@ jobs:
             exit 1
           else
             # 如果有代码，执行交换 Token 的逻辑（需在 Python 脚本中补充该逻辑）
-            python auth_generator_github.py --code ${{ github.event.inputs.auth_code }}
+            python auth_generator.py "$INPUT_AUTH_CODE"
           fi
