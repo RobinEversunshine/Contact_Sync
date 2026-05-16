@@ -23,13 +23,14 @@ jobs:
       - name: Run Auth Script
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+          INPUT_AUTH_CODE: ${{ github.event.inputs.auth_code }}
         run: |
-          # 如果输入框为空，打印链接
-          if [ "${{ github.event.inputs.auth_code }}" == "" ]; then
+          # If the input box is empty, print the link.
+          if [ "$INPUT_AUTH_CODE" == "" ]; then
             python auth_generator_github.py
-            echo "::error::请点击日志中的链接获取代码，并再次运行此 Workflow，填入代码！"
+            echo "::error::Please click the link in the log to get the code, and then run this Workflow again, entering the code."
             exit 1
           else
-            # 如果有代码，执行交换 Token 的逻辑（需在 Python 脚本中补充该逻辑）
-            python auth_generator.py "$INPUT_AUTH_CODE"
+            # If there is code, execute the logic for exchanging tokens.
+            python auth_generator_github.py
           fi
