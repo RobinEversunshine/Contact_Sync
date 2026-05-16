@@ -1,5 +1,6 @@
 # Generate token.json from each of your gmail account
 # Since you have 2 gmail accounts we need to run this script twice with different names like token_a.json and token_b.json
+# this code is used to run locally with Python and Visual Studio Code installed
 
 from google_auth_oauthlib.flow import InstalledAppFlow
 SCOPES = ['https://www.googleapis.com/auth/contacts']

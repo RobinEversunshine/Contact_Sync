@@ -6,46 +6,46 @@ import sys
 SCOPES = ['https://www.googleapis.com/auth/contacts']
 
 def main():
-    # 1. 获取 Google Credentials JSON 字符串
+    # 1. Retrieve Google Credentials JSON string
     creds_json_str = os.environ.get('GOOGLE_CREDENTIALS')
     if not creds_json_str:
-        raise ValueError("❌ 错误：环境变量 GOOGLE_CREDENTIALS 为空")
+        raise ValueError("❌ Error: Environment variable GOOGLE_CREDENTIALS is empty")
 
-    # 2. 将字符串解析为 Python 字典
+    # 2. Parse the string into a Python dictionary
     client_config = json.loads(creds_json_str)
 
-    # 3. 初始化 Flow
+    # 3. Initialize the Flow
     flow = InstalledAppFlow.from_client_config(
         client_config, 
         scopes=SCOPES,
         redirect_uri='urn:ietf:wg:oauth:2.0:oob'
     )
 
-    # 4. 读取从 GitHub Actions 传进来的验证码环境变量
+    # 4. Read the authorization code environment variable passed from GitHub Actions
     auth_code = os.environ.get('INPUT_AUTH_CODE')
 
-    # 如果有验证码，执行【第二步】：向 Google 换取 Token
+    # If an authorization code exists, execute [Step 2]: Exchange the code for a Token with Google
     if auth_code:
         auth_code = auth_code.strip()
-        print(f"🔄 正在向 Google 换取 Token，验证码长度: {len(auth_code)}...")
+        print(f"🔄 Exchanging code for Token with Google, auth code length: {len(auth_code)}...")
         
         try:
-            # 显式关闭或不提供 verifier，因为我们在第一步停用了 PKCE
+            # Explicitly omit or disable verifier because PKCE was disabled in Step 1
             flow.fetch_token(code=auth_code)
             creds = flow.credentials
             
             print("\n" + "="*60)
-            print("🎉 成功生成 Token！请复制下方全部内容存入 GitHub Secrets:")
+            print("🎉 Token generated successfully! Copy the entire content below into GitHub Secrets:")
             print("="*60 + "\n")
             print(creds.to_json())
             print("\n" + "="*60)
         except Exception as e:
-            print(f"❌ 交换 Token 失败: {e}")
+            print(f"❌ Failed to exchange Token: {e}")
             
-    # 如果没有验证码，执行【第一步】：生成并打印授权链接
+    # If no authorization code exists, execute [Step 1]: Generate and print the authorization URL
     else:
-        # 💡 【关键修改点】: 显式设置 code_challenge=None 来关闭 PKCE 验证
-        # 这样可以防止 Google 在跨环境（GitHub Action 第二次运行）时索要 code_verifier
+        # 💡 [CRITICAL MODIFICATION]: Explicitly set code_challenge=None to disable PKCE verification
+        # This prevents Google from demanding a code_verifier across different execution environments (e.g., subsequent GitHub Action runs)
         auth_url, _ = flow.authorization_url(
             prompt='consent', 
             access_type='offline',
@@ -53,12 +53,12 @@ def main():
         )
         
         print("\n" + "="*60)
-        print("👉 第一步：请在浏览器中打开以下链接进行授权：")
+        print("👉 Step 1: Open the following link in your browser to authorize:")
         print("-" * 60)
         print(auth_url)
         print("-" * 60)
-        print("\n👉 第二步：授权后，Google 会给你一串验证码（Authorization Code）。")
-        print("请再次触发 GitHub Actions，并将验证码粘贴进输入框中。")
+        print("\n👉 Step 2: After authorization, Google will provide an Authorization Code.")
+        print("Please trigger the GitHub Actions workflow again and paste the code into the input field.")
         print("="*60 + "\n")
         sys.exit(1)
 
