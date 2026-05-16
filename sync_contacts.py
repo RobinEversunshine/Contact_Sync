@@ -1,11 +1,11 @@
 import datetime
-import json
-import os
+# import json
+# import os
 import pycountry
-from google.oauth2.credentials import Credentials
-from googleapiclient.discovery import build
+# from google.oauth2.credentials import Credentials
+# from googleapiclient.discovery import build
 
-SCOPES = ['https://www.googleapis.com/auth/contacts']
+# SCOPES = ['https://www.googleapis.com/auth/contacts']
 
 
 raw_payload = {
@@ -187,26 +187,26 @@ def upsert_contact(service, data):
         print(f"❌ Something went wrong: {e}")
 
 
-def get_service_from_env(env_var_name):
-    """Retrieve Google People service using credentials from file or environment"""
-    if __name__ == '__main__':
-        # Use local JSON file for testing
-        creds = Credentials.from_authorized_user_file(f'{env_var_name}.json', SCOPES)
-    else:
-        # Get token from GitHub Secrets/Environment Variables
-        token_data = json.loads(os.environ.get(env_var_name))
-        creds = Credentials.from_authorized_user_info(token_data)
-    return build('people', 'v1', credentials=creds)
+# def get_service_from_env(env_var_name):
+#     """Retrieve Google People service using credentials from file or environment"""
+#     if __name__ == '__main__':
+#         # Use local JSON file for testing
+#         creds = Credentials.from_authorized_user_file(f'{env_var_name}.json', SCOPES)
+#     else:
+#         # Get token from GitHub Secrets/Environment Variables
+#         token_data = json.loads(os.environ.get(env_var_name))
+#         creds = Credentials.from_authorized_user_info(token_data)
+#     return build('people', 'v1', credentials=creds)
 
 
-def main(payload):
+def main(payload, service_a, service_b):
     # Initialize services
-    if __name__ == '__main__':
-        service_a = get_service_from_env('token_a')
-        service_b = get_service_from_env('token_b')
-    else:
-        service_a = get_service_from_env('GMAIL_TOKEN_A')
-        service_b = get_service_from_env('GMAIL_TOKEN_B')
+    # if __name__ == '__main__':
+    #     service_a = get_service_from_env('token_a')
+    #     service_b = get_service_from_env('token_b')
+    # else:
+    #     service_a = get_service_from_env('GMAIL_TOKEN_A')
+    #     service_b = get_service_from_env('GMAIL_TOKEN_B')
     
     # Create or update contacts in both accounts
     upsert_contact(service_a, payload)
