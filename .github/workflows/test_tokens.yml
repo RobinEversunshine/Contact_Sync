@@ -1,0 +1,27 @@
+name: Test Google Tokens
+on:
+  workflow_dispatch:
+
+jobs:
+  check-tokens:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
+
+      - name: Verify Tokens
+        env:
+          GMAIL_TOKEN_A: ${{ secrets.GMAIL_TOKEN_A }}
+          GMAIL_TOKEN_B: ${{ secrets.GMAIL_TOKEN_B }}
+        run: python test_tokens.py
