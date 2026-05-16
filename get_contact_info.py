@@ -2,44 +2,44 @@ import os, json
 
 
 def main():
-    # GitHub Actions 会把触发时传来的数据存放在这个环境变量中
+    # GitHub Actions stores the event payload data in this environment variable when triggered
     event_path = os.getenv('GITHUB_EVENT_PATH')
     
     if not event_path or not os.path.exists(event_path):
-        print("⚠️ 未找到 GITHUB_EVENT_PATH，返回空列表。")
+        print("⚠️ GITHUB_EVENT_PATH not found. Returning an empty list.")
         return []
         
     with open(event_path, 'r') as f:
         event_data = json.load(f)
     
-    # 1. 提取快捷指令发来的 client_payload
+    # 1. Extract the client_payload sent by the shortcut
     payload = event_data.get('client_payload', {})
     
-    # 2. 从 payload 中获取我们在快捷指令里打包的 'contacts' 列表
-    # 如果快捷指令发来的不是批量格式，则默认兼容单人格式包装成列表 [payload]
+    # 2. Extract the 'contacts' list packaged inside the payload from the shortcut
+    # If the payload isn't in a batch format, wrap the single format into a list [payload] for backward compatibility
     contact_list = payload.get('contacts')
     print(contact_list)
     
     if not isinstance(contact_list, list):
-        if payload: # 兼容老版本的单人传输格式
+        if payload:  # Support backward compatibility for legacy single-contact formats
             contact_list = [payload]
         else:
             contact_list = []
 
     fields = ['fname', 'lname', 'phone', 'email', 'address', 'note', 'bday', 'url', 'social']
 
-    print(f"📦 --- 收到批量同步请求，共 {len(contact_list)} 个联系人 ---")
+    print(f"📦 --- Received batch sync request for {len(contact_list)} contacts ---")
     
-    # 3. 循环打印检查每个人的数据
+    # 3. Loop through and print-check each contact's data
     for index, person in enumerate(contact_list, 1):
-        print(f"\n👤 联系人 #{index}:")
+        print(f"\n👤 Contact #{index}:")
         for field in fields:
             value = person.get(field, 'N/A')
             print(f"  {field.capitalize()}: {value}")
             
     print("\n--------------------------------------")
     
-    return contact_list # 👈 核心修改：现在返回的是一个列表 [{}, {}, ...]
+    return contact_list  # 👈 Core Modification: Now returns a list of dicts [{}, {}, ...]
 
 
 if __name__ == "__main__":
